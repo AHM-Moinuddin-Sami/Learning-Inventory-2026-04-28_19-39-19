@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb1ca6a334313a448175f6fb498c8ed, type: 3}
+  m_Name: Greatsword
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  tile: {fileID: 0}
+  itemType: 0
+  actionType: 0
+  range: {x: 5, y: 4}
+  stackable: 0
+  image: {fileID: -92612461, guid: 520f05545340296499b29829c3c3012d, type: 3}
+  maxStackCount: 1
+  weaponHandType: 2
