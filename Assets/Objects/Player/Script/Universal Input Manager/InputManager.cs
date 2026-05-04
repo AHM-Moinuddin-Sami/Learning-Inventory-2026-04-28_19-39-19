@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour
     [Header("Action Map Names")]
     [SerializeField] private string hotkeyActionMapName = "UI";
 
-    [Header("Action Names")]
+    [Header("Inventory Action Names")]
     [SerializeField]
     private string[] hotkeyActionNames =
     {
@@ -62,6 +62,7 @@ public class InputManager : MonoBehaviour
         UnregisterHotkeyCallbacks();
     }
 
+    // ---------- Toolbar set up section start ----------
     private void CacheHotkeyActions()
     {
         if (inputActions == null)
@@ -160,4 +161,6 @@ public class InputManager : MonoBehaviour
         Debug.Log("Equipment hotkey action triggered: " + context.action.name);
         OnEquipmentHotkeyPressed?.Invoke();
     }
+
+    // ---------- Toolbar set up section end ----------
 }
