@@ -6,9 +6,9 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] private InventorySlot leftHandSlot;
     [SerializeField] private InventoryManager inventoryManager;
 
-    public bool TryEquipWeapon(InventoryItem draggedItem, InventorySlot droppedSlot, out InventoryItem pickedUpItem)
+    public bool TryEquipWeapon(InventoryItem draggedItem, InventorySlot droppedSlot, out InventoryItem[] pickedUpItems)
     {
-        pickedUpItem = null;
+        pickedUpItems = null;
 
         if (draggedItem == null || draggedItem.item == null)
         {
@@ -22,20 +22,20 @@ public class EquipmentManager : MonoBehaviour
 
         if (draggedItem.item.weaponHandType == WeaponHandType.TwoHanded)
         {
-            return EquipTwoHandedWeapon(draggedItem, out pickedUpItem);
+            return EquipTwoHandedWeapon(draggedItem, out pickedUpItems);
         }
 
         if (draggedItem.item.weaponHandType == WeaponHandType.OneHanded)
         {
-            return EquipOneHandedWeapon(draggedItem, droppedSlot, out pickedUpItem);
+            return EquipOneHandedWeapon(draggedItem, droppedSlot, out pickedUpItems);
         }
 
         return false;
     }
 
-    private bool EquipTwoHandedWeapon(InventoryItem draggedItem, out InventoryItem pickedUpItem)
+    private bool EquipTwoHandedWeapon(InventoryItem draggedItem, out InventoryItem[] pickedUpItems)
     {
-        pickedUpItem = null;
+        pickedUpItems = null;
 
         if (rightHandSlot == null || leftHandSlot == null)
         {
@@ -45,26 +45,27 @@ public class EquipmentManager : MonoBehaviour
         InventoryItem rightHandItem = GetItemInSlot(rightHandSlot);
         InventoryItem leftHandItem = GetItemInSlot(leftHandSlot);
 
-        if (leftHandItem != null && leftHandItem != draggedItem)
+        if (rightHandItem != null && rightHandItem != draggedItem &&
+            leftHandItem != null && leftHandItem != draggedItem)
         {
-            if (inventoryManager.TryStoreExistingItem(leftHandItem) == false)
-            {
-                return false;
-            }
+            pickedUpItems = new InventoryItem[] { rightHandItem, leftHandItem };
         }
-
-        if (rightHandItem != null && rightHandItem != draggedItem)
+        else if (rightHandItem != null && rightHandItem != draggedItem)
         {
-            pickedUpItem = rightHandItem;
+            pickedUpItems = new InventoryItem[] { rightHandItem };
+        }
+        else if (leftHandItem != null && leftHandItem != draggedItem)
+        {
+            pickedUpItems = new InventoryItem[] { leftHandItem };
         }
 
         draggedItem.parentAfterDrag = rightHandSlot.transform;
         return true;
     }
 
-    private bool EquipOneHandedWeapon(InventoryItem draggedItem, InventorySlot droppedSlot, out InventoryItem pickedUpItem)
+    private bool EquipOneHandedWeapon(InventoryItem draggedItem, InventorySlot droppedSlot, out InventoryItem[] pickedUpItems)
     {
-        pickedUpItem = null;
+        pickedUpItems = null;
 
         if (rightHandSlot == null || leftHandSlot == null)
         {
@@ -75,7 +76,7 @@ public class EquipmentManager : MonoBehaviour
 
         if (IsTwoHandedWeapon(rightHandItem) && rightHandItem != draggedItem)
         {
-            pickedUpItem = rightHandItem;
+            pickedUpItems = new InventoryItem[] { rightHandItem };
             draggedItem.parentAfterDrag = rightHandSlot.transform;
             return true;
         }
@@ -91,7 +92,7 @@ public class EquipmentManager : MonoBehaviour
 
         if (targetItem != null && targetItem != draggedItem)
         {
-            pickedUpItem = targetItem;
+            pickedUpItems = new InventoryItem[] { targetItem };
         }
 
         draggedItem.parentAfterDrag = targetSlot.transform;

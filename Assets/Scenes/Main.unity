@@ -2042,6 +2042,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cbd0d0b7f7bb9d43b9a6f9fbcb123bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestInteractable
+  itemName: Gold
+  interactionType: 1
+  item: {fileID: 11400000, guid: 0abf5fc12fe73bc44ab9014d376c763d, type: 2}
 --- !u!61 &674064670
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2076,7 +2079,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.038484156, y: -0.024739623}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2086,7 +2089,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.62303174, y: 0.56255734}
   m_EdgeRadius: 0
 --- !u!1001 &781861937
 PrefabInstance:
@@ -4080,7 +4083,6 @@ GameObject:
   - component: {fileID: 1241641984}
   - component: {fileID: 1241641983}
   - component: {fileID: 1241641982}
-  - component: {fileID: 1241641981}
   - component: {fileID: 1241641980}
   - component: {fileID: 1241641979}
   - component: {fileID: 1241641978}
@@ -4088,10 +4090,11 @@ GameObject:
   - component: {fileID: 1241641976}
   - component: {fileID: 1241641975}
   - component: {fileID: 1241641974}
+  - component: {fileID: 1241641985}
   m_Layer: 0
   m_Name: Player Character
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -4166,7 +4169,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1378506218}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1241641974
@@ -4195,7 +4199,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
   interactionDistance: 1
-  interactionDuration: 0.1
   interactionLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -4225,7 +4228,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f29e1acf594d94eae475f742a111e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
-  attackDuration: 0.35
+  attackPoint: {fileID: 1378506218}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  combos:
+  - {fileID: 11400000, guid: b0ca83db3aa3ceb49a03e446425430c4, type: 2}
+  - {fileID: 11400000, guid: d0f671cf696740f409191f29766380c6, type: 2}
+  - {fileID: 11400000, guid: ecfc77b203ac08d4085382f70415188d, type: 2}
+  attackPointDistance: 0.5
+  maxComboInputLength: 6
 --- !u!114 &1241641978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4238,9 +4250,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32e38b7cea5aa554c80404609e978353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimator
-  playerMovement: {fileID: 1241641974}
-  stateMachine: {fileID: 1241641979}
-  animator: {fileID: 1241641982}
 --- !u!114 &1241641979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4253,11 +4262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a19f5551a839c04bb4c2b3b3f75b367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStateMachine
-  inputReader: {fileID: 1241641980}
-  playerMovement: {fileID: 1241641974}
-  playerCombat: {fileID: 1241641977}
-  playerDodge: {fileID: 1241641976}
-  playerInteraction: {fileID: 1241641975}
+  currentStateType: 0
 --- !u!114 &1241641980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4270,52 +4275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81de626a3f509349a52874d1cb59820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputReader
---- !u!61 &1241641981
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241641970}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3, y: 2.625}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!95 &1241641982
 Animator:
   serializedVersion: 7
@@ -4462,7 +4421,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1241641980}
         m_TargetAssemblyTypeName: PlayerInputReader, Assembly-CSharp
-        m_MethodName: OnAttack
+        m_MethodName: OnLightAttack
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4490,11 +4449,64 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 4e2a216e-54ae-4ba8-8ef5-c73a2459b4c9
     m_ActionName: Gameplay/Dodge
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1241641980}
+        m_TargetAssemblyTypeName: PlayerInputReader, Assembly-CSharp
+        m_MethodName: OnHeavyAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ffbaf79b-78a0-424c-b828-4050fd8e132f
+    m_ActionName: 'Gameplay/Heavy Attack[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!70 &1241641985
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241641970}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.03573492, y: -0.06322369}
+  m_Size: {x: 0.6084998, y: 0.993339}
+  m_Direction: 0
 --- !u!1 &1282112275
 GameObject:
   m_ObjectHideFlags: 0
@@ -4540,6 +4552,37 @@ Transform:
   - {fileID: 934298762}
   - {fileID: 1944430044}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1378506217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1378506218}
+  m_Layer: 0
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1378506218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378506217}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1241641973}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1436645483
 GameObject:

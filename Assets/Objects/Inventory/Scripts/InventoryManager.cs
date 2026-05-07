@@ -82,8 +82,9 @@ public class InventoryManager : MonoBehaviour
         }
 
         InventoryItem itemToPlace = heldItem;
+        Transform originalParent = itemToPlace.parentAfterDrag;
 
-        if (slot.TryPlaceItem(itemToPlace, out InventoryItem pickedUpItem) == false)
+        if (slot.TryPlaceItem(itemToPlace, out InventoryItem[] pickedUpItems) == false)
         {
             return false;
         }
@@ -93,18 +94,58 @@ public class InventoryManager : MonoBehaviour
         itemToPlace.SetRaycastTarget(true);
         itemToPlace.SnapToParentAfterDrag();
 
-        if (pickedUpItem != null && pickedUpItem != itemToPlace)
-        {
-            HoldItem(pickedUpItem);
-        }
+        HandlePickedUpItems(pickedUpItems, originalParent);
 
         return true;
     }
 
-    private void HoldItem(InventoryItem inventoryItem)
+    private void HandlePickedUpItems(InventoryItem[] pickedUpItems, Transform originalParent)
     {
+        if (pickedUpItems == null || pickedUpItems.Length == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < pickedUpItems.Length; i++)
+        {
+            InventoryItem pickedUpItem = pickedUpItems[i];
+
+            if (pickedUpItem == null)
+            {
+                continue;
+            }
+
+            if (heldItem == null)
+            {
+                HoldItem(pickedUpItem, originalParent);
+                continue;
+            }
+
+            TryStoreExistingItem(pickedUpItem);
+        }
+    }
+    public void HandlePickedUpItemsFromDrag(InventoryItem[] pickedUpItems, Transform originalParent)
+    {
+        HandlePickedUpItems(pickedUpItems, originalParent);
+    }
+    private void HoldItem(InventoryItem inventoryItem, Transform returnParent = null)
+    {
+        if (inventoryItem == null)
+        {
+            return;
+        }
+
         heldItem = inventoryItem;
-        heldItem.parentAfterDrag = heldItem.transform.parent;
+
+        if (returnParent == null)
+        {
+            heldItem.parentAfterDrag = heldItem.transform.parent;
+        }
+        else
+        {
+            heldItem.parentAfterDrag = returnParent;
+        }
+
         heldItem.SetRaycastTarget(false);
         heldItem.transform.SetParent(heldItem.transform.root);
     }

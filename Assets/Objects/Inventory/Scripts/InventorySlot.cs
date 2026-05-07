@@ -52,6 +52,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler
     {
         image.color = notSelectedColor;
     }
+
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag == null)
@@ -66,15 +67,18 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler
             return;
         }
 
-        if (TryPlaceItem(inventoryItem, out InventoryItem replacedItem) == false)
+        Transform originalParent = inventoryItem.parentAfterDrag;
+
+        if (TryPlaceItem(inventoryItem, out InventoryItem[] pickedUpItems) == false)
         {
             return;
         }
 
-        if (replacedItem != null && replacedItem != inventoryItem)
+        inventoryItem.SnapToParentAfterDrag();
+
+        if (InventoryManager.Instance != null)
         {
-            replacedItem.parentAfterDrag = inventoryItem.parentAfterDrag;
-            replacedItem.SnapToParentAfterDrag();
+            InventoryManager.Instance.HandlePickedUpItemsFromDrag(pickedUpItems, originalParent);
         }
     }
 
@@ -88,9 +92,9 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler
         InventoryManager.Instance.TryPlaceHeldItemInSlot(this);
     }
 
-    public bool TryPlaceItem(InventoryItem inventoryItem, out InventoryItem replacedItem)
+    public bool TryPlaceItem(InventoryItem inventoryItem, out InventoryItem[] pickedUpItems)
     {
-        replacedItem = null;
+        pickedUpItems = null;
 
         if (inventoryItem == null || inventoryItem.item == null)
         {
@@ -100,7 +104,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler
         if (equipmentManager != null &&
             (slotRestriction == SlotRestriction.RightHanded || slotRestriction == SlotRestriction.LeftHanded))
         {
-            return equipmentManager.TryEquipWeapon(inventoryItem, this, out replacedItem);
+            return equipmentManager.TryEquipWeapon(inventoryItem, this, out pickedUpItems);
         }
 
         if (CanAcceptItem(inventoryItem.item.itemType) == false)
@@ -112,7 +116,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler
 
         if (currentItem != null && currentItem != inventoryItem)
         {
-            replacedItem = currentItem;
+            pickedUpItems = new InventoryItem[] { currentItem };
         }
 
         inventoryItem.parentAfterDrag = transform;

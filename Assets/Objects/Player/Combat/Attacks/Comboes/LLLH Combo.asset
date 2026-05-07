@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bef65ac53151524e8622f65106e6074, type: 3}
+  m_Name: LLLH Combo
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerComboData
+  steps:
+  - inputType: 0
+    attackData: {fileID: 11400000, guid: 16f78bdf0ef99044193f052e61641efd, type: 2}
+  - inputType: 0
+    attackData: {fileID: 11400000, guid: 7c9821d45c838224a88276e9ccd6b9e1, type: 2}
+  - inputType: 0
+    attackData: {fileID: 11400000, guid: 49c5627837698294ab66721776f0ef8e, type: 2}
+  - inputType: 1
+    attackData: {fileID: 11400000, guid: 3358f013194b0e24dbabf89cef098c62, type: 2}
