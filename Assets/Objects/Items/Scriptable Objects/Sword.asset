@@ -20,3 +20,10 @@ MonoBehaviour:
   image: {fileID: 1586235459, guid: 520f05545340296499b29829c3c3012d, type: 3}
   maxStackCount: 1
   weaponHandType: 1
+  statModifiers:
+  - statType: 1
+    modifierMode: 0
+    value: 10
+  - statType: 1
+    modifierMode: 1
+    value: 10

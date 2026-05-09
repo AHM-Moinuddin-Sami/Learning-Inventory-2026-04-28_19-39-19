@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede5d08d79862294b9beb29ddb6d0761, type: 3}
   m_Name: Heavy2
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackData
-  animationTriggerName: Heavy2
+  inputType: 1
+  animationTriggerName: HeavyAttack
+  animationStep: 1
   damage: 1
   attackRadius: 0.5
   attackLockDuration: 0.35

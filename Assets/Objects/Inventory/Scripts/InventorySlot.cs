@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -24,6 +25,8 @@ public enum SlotRestriction
 
 public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler
 {
+    public static event Action OnSlotContentsChanged;
+
     [SerializeField] private Image image;
     [SerializeField] private Color selectedColor;
     [SerializeField] private Color notSelectedColor;
@@ -38,11 +41,11 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler
         }
     }
 
-
     public void Awake()
     {
         Deselect();
     }
+
     public void Select()
     {
         image.color = selectedColor;
@@ -80,6 +83,8 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler
         {
             InventoryManager.Instance.HandlePickedUpItemsFromDrag(pickedUpItems, originalParent);
         }
+
+        NotifySlotContentsChanged();
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -125,30 +130,57 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     public bool CanAcceptItem(ItemType itemType)
     {
-        return slotRestriction switch
+        switch (slotRestriction)
         {
-            SlotRestriction.Any => true,
+            case SlotRestriction.Any:
+                return true;
 
-            SlotRestriction.WeaponOnly => itemType == ItemType.Weapon,
-            SlotRestriction.ArmourOnly => itemType == ItemType.Armour,
-            SlotRestriction.Equipment => itemType == ItemType.Weapon || itemType == ItemType.Armour,
+            case SlotRestriction.WeaponOnly:
+                return itemType == ItemType.Weapon;
 
-            SlotRestriction.Consumable => itemType == ItemType.Consumable,
+            case SlotRestriction.ArmourOnly:
+                return itemType == ItemType.Armour;
 
-            // Specific Equipment
-            SlotRestriction.Helmet => itemType == ItemType.Helmet,
-            SlotRestriction.BodyArmour => itemType == ItemType.BodyArmour,
-            SlotRestriction.Gloves => itemType == ItemType.Gloves,
-            SlotRestriction.Leggings => itemType == ItemType.Leggings,
-            SlotRestriction.Boots => itemType == ItemType.Boots,
+            case SlotRestriction.Equipment:
+                return itemType == ItemType.Weapon || itemType == ItemType.Armour;
 
-            SlotRestriction.RightHanded => itemType == ItemType.Weapon,
-            SlotRestriction.LeftHanded => itemType == ItemType.Weapon,
+            case SlotRestriction.Consumable:
+                return itemType == ItemType.Consumable;
 
-            SlotRestriction.Ring => itemType == ItemType.Ring,
-            SlotRestriction.Amulet => itemType == ItemType.Amulet,
+            case SlotRestriction.Helmet:
+                return itemType == ItemType.Helmet;
 
-            _ => false
-        };
+            case SlotRestriction.BodyArmour:
+                return itemType == ItemType.BodyArmour;
+
+            case SlotRestriction.Gloves:
+                return itemType == ItemType.Gloves;
+
+            case SlotRestriction.Leggings:
+                return itemType == ItemType.Leggings;
+
+            case SlotRestriction.Boots:
+                return itemType == ItemType.Boots;
+
+            case SlotRestriction.RightHanded:
+                return itemType == ItemType.Weapon;
+
+            case SlotRestriction.LeftHanded:
+                return itemType == ItemType.Weapon;
+
+            case SlotRestriction.Ring:
+                return itemType == ItemType.Ring;
+
+            case SlotRestriction.Amulet:
+                return itemType == ItemType.Amulet;
+
+            default:
+                return false;
+        }
+    }
+
+    public static void NotifySlotContentsChanged()
+    {
+        OnSlotContentsChanged?.Invoke();
     }
 }

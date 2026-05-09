@@ -8,7 +8,14 @@ using UnityEngine;
 public class PlayerStateMachine : MonoBehaviour
 {
     [SerializeField] private PlayerState currentStateType;
-
+    private PlayerAnimator playerAnimator;
+    public PlayerAnimator PlayerAnimatorRef
+    {
+        get
+        {
+            return playerAnimator;
+        }
+    }
     private PlayerInputReader inputReader;
     private PlayerMovement playerMovement;
     private PlayerCombat playerCombat;
@@ -85,6 +92,7 @@ public class PlayerStateMachine : MonoBehaviour
         playerCombat = GetComponent<PlayerCombat>();
         playerDodge = GetComponent<PlayerDodge>();
         playerInteraction = GetComponent<PlayerInteraction>();
+        playerAnimator = GetComponent<PlayerAnimator>();
 
         idleState = new PlayerIdleState(this);
         moveState = new PlayerMoveState(this);
@@ -212,11 +220,6 @@ public class PlayerStateMachine : MonoBehaviour
             return;
         }
 
-        if (currentStateType == PlayerState.Attacking)
-        {
-            return;
-        }
-
         bool startedAttack = playerCombat.TryStartAttack(inputType);
 
         if (startedAttack == false)
@@ -224,7 +227,10 @@ public class PlayerStateMachine : MonoBehaviour
             return;
         }
 
-        SwitchToAttackState();
+        if (currentStateType != PlayerState.Attacking)
+        {
+            SwitchToAttackState();
+        }
     }
 
     private void HandleDodgePressed()
@@ -272,6 +278,18 @@ public class PlayerStateMachine : MonoBehaviour
     public void FinishAttack()
     {
         if (currentStateType != PlayerState.Attacking)
+        {
+            return;
+        }
+
+        Debug.Log("Finished attack");
+
+        ReturnToMovementState();
+    }
+
+    public void FinishDodge()
+    {
+        if (currentStateType != PlayerState.Dodging)
         {
             return;
         }

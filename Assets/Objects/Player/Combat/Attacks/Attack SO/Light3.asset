@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede5d08d79862294b9beb29ddb6d0761, type: 3}
   m_Name: Light3
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackData
-  animationTriggerName: Light3
+  inputType: 0
+  animationTriggerName: LightAttack
+  animationStep: 2
   damage: 1
   attackRadius: 0.5
-  attackLockDuration: 0.2
-  comboDuration: 0.7
-  resetDuration: 0.8
+  attackLockDuration: 0.28
+  comboDuration: 1
+  resetDuration: 1.2

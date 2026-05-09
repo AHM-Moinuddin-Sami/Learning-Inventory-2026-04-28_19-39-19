@@ -4,6 +4,5 @@ public enum StatType
     Damage,
     Defence,
     MoveSpeed,
-    AttackSpeed,
     CritChance
 }

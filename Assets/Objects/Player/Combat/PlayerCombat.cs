@@ -7,6 +7,8 @@ public class PlayerCombat : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform attackPoint;
     [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private PlayerAnimator playerAnimator;
 
     [Header("Combos")]
     [SerializeField] private PlayerComboData[] combos;
@@ -55,6 +57,16 @@ public class PlayerCombat : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
+
+        if (playerStats == null)
+        {
+            playerStats = GetComponent<PlayerStats>();
+        }
+
+        if (playerAnimator == null)
+        {
+            playerAnimator = GetComponent<PlayerAnimator>();
+        }
 
         inputSequence = new AttackInputType[maxComboInputLength];
     }
@@ -125,9 +137,11 @@ public class PlayerCombat : MonoBehaviour
             enemyLayer
         );
 
+        int finalDamage = GetFinalAttackDamage(currentAttack);
+
         for (int i = 0; i < hits.Length; i++)
         {
-            Debug.Log("Hit enemy: " + hits[i].gameObject.name + " for " + currentAttack.Damage + " damage.");
+            Debug.Log("Hit enemy: " + hits[i].gameObject.name + " for " + finalDamage + " damage.");
         }
     }
 
@@ -153,10 +167,34 @@ public class PlayerCombat : MonoBehaviour
         comboTimer = attackData.ComboDuration;
         resetTimer = attackData.ResetDuration;
 
-        animator.ResetTrigger(attackData.AnimationTriggerName);
-        animator.SetTrigger(attackData.AnimationTriggerName);
+        if (playerAnimator != null)
+        {
+            playerAnimator.PlayAttackAnimation(attackData);
+        }
+        else
+        {
+            animator.ResetTrigger(attackData.AnimationTriggerName);
+            animator.SetTrigger(attackData.AnimationTriggerName);
+        }
 
-        Debug.Log("Playing attack: " + attackData.name);
+        Debug.Log("Playing attack: " + attackData.name + " with animation step " + attackData.AnimationStep);
+    }
+
+    private int GetFinalAttackDamage(PlayerAttackData attackData)
+    {
+        if (attackData == null)
+        {
+            return 0;
+        }
+
+        float bonusDamage = 0f;
+
+        if (playerStats != null)
+        {
+            bonusDamage = playerStats.GetFinalValue(StatType.Damage);
+        }
+
+        return Mathf.RoundToInt(attackData.Damage + bonusDamage);
     }
 
     private void AddInputToSequence(AttackInputType inputType)

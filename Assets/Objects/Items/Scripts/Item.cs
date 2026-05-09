@@ -4,11 +4,10 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "Scriptable Objects/Item")]
 public class Item : ScriptableObject
 {
-
     public TileBase tile;
     public ItemType itemType;
     public ActionType actionType;
-    public Vector2Int range = new(5, 4);
+    public Vector2Int range = new Vector2Int(5, 4);
 
     public bool stackable = true;
 
@@ -17,6 +16,17 @@ public class Item : ScriptableObject
 
     [Header("Weapon Hand Type")]
     public WeaponHandType weaponHandType = WeaponHandType.None;
+
+    [Header("Stats")]
+    [SerializeField] private StatModifier[] statModifiers;
+
+    public StatModifier[] StatModifiers
+    {
+        get
+        {
+            return statModifiers;
+        }
+    }
 }
 
 public enum ItemType

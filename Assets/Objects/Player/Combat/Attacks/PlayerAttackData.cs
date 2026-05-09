@@ -3,8 +3,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Combat/Attack Data")]
 public class PlayerAttackData : ScriptableObject
 {
+    [Header("Input")]
+    [SerializeField] private AttackInputType inputType;
+
     [Header("Animation")]
     [SerializeField] private string animationTriggerName;
+    [SerializeField] private int animationStep;
 
     [Header("Damage")]
     [SerializeField] private int damage = 1;
@@ -15,11 +19,27 @@ public class PlayerAttackData : ScriptableObject
     [SerializeField] private float comboDuration = 0.55f;
     [SerializeField] private float resetDuration = 0.8f;
 
+    public AttackInputType InputType
+    {
+        get
+        {
+            return inputType;
+        }
+    }
+
     public string AnimationTriggerName
     {
         get
         {
             return animationTriggerName;
+        }
+    }
+
+    public int AnimationStep
+    {
+        get
+        {
+            return animationStep;
         }
     }
 

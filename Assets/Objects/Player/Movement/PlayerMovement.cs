@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private PlayerStats playerStats;
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
@@ -35,6 +36,11 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        if (playerStats == null)
+        {
+            playerStats = GetComponent<PlayerStats>();
+        }
     }
 
     public void SetMoveInput(Vector2 newMoveInput)
@@ -59,6 +65,13 @@ public class PlayerMovement : MonoBehaviour
 
     public void TickMovement()
     {
-        rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        float finalMoveSpeed = moveSpeed;
+
+        if (playerStats != null)
+        {
+            finalMoveSpeed = playerStats.GetFinalValue(StatType.MoveSpeed);
+        }
+
+        rb.MovePosition(rb.position + moveInput * finalMoveSpeed * Time.fixedDeltaTime);
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance { get; private set; }
+
     [SerializeField] private InventorySlot[] inventorySlots;
     [SerializeField] private GameObject inventoryItemPrefab;
     [SerializeField] private GameObject inventoryRoot;
@@ -23,6 +24,7 @@ public class InventoryManager : MonoBehaviour
 
         Instance = this;
     }
+
     private void Start()
     {
         SelectSlotByIndex(0);
@@ -96,6 +98,8 @@ public class InventoryManager : MonoBehaviour
 
         HandlePickedUpItems(pickedUpItems, originalParent);
 
+        InventorySlot.NotifySlotContentsChanged();
+
         return true;
     }
 
@@ -124,10 +128,12 @@ public class InventoryManager : MonoBehaviour
             TryStoreExistingItem(pickedUpItem);
         }
     }
+
     public void HandlePickedUpItemsFromDrag(InventoryItem[] pickedUpItems, Transform originalParent)
     {
         HandlePickedUpItems(pickedUpItems, originalParent);
     }
+
     private void HoldItem(InventoryItem inventoryItem, Transform returnParent = null)
     {
         if (inventoryItem == null)
@@ -148,6 +154,8 @@ public class InventoryManager : MonoBehaviour
 
         heldItem.SetRaycastTarget(false);
         heldItem.transform.SetParent(heldItem.transform.root);
+
+        InventorySlot.NotifySlotContentsChanged();
     }
 
     public void CancelHeldItem()
@@ -160,6 +168,8 @@ public class InventoryManager : MonoBehaviour
         heldItem.SetRaycastTarget(true);
         heldItem.SnapToParentAfterDrag();
         heldItem = null;
+
+        InventorySlot.NotifySlotContentsChanged();
     }
 
     public void SelectSlotByIndex(int slotIndex)
@@ -201,6 +211,8 @@ public class InventoryManager : MonoBehaviour
         }
 
         AddToEmptySlots(item, ref amount);
+
+        InventorySlot.NotifySlotContentsChanged();
 
         return true;
     }
@@ -311,6 +323,8 @@ public class InventoryManager : MonoBehaviour
         inventoryItem.transform.SetParent(slot.transform);
         inventoryItem.transform.localPosition = Vector3.zero;
 
+        InventorySlot.NotifySlotContentsChanged();
+
         return true;
     }
 
@@ -358,6 +372,7 @@ public class InventoryManager : MonoBehaviour
         inventoryItem.count = amount;
         inventoryItem.RefreshCount();
     }
+
     public bool HasHeldItem
     {
         get
