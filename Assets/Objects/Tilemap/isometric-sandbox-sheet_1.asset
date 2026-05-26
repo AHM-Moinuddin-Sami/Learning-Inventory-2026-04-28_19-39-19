@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: tiles_20
+  m_Name: isometric-sandbox-sheet_1
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
-  m_Sprite: {fileID: 30703454, guid: a337af2faa1c30343ac1ff3deb30e687, type: 3}
+  m_Sprite: {fileID: 442528432, guid: b2cf475503889e44e8b80a2ee3f09d15, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
